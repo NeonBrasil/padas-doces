@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Padas Doces - Especial de Natal</title>
+    <style>
+        :root {
+            /* Cores Natalinas */
+            --christmas-red: #c62828;
+            --christmas-dark-red: #8e0000;
+            --christmas-green: #2e7d32;
+            --gold: #fbc02d;
+            --bg-color: #fffafa;
+            --card-bg: #ffffff;
+            --text-color: #2c0e0e;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 100px; }
+        
+        /* Barra de Aviso */
+        .alert-bar {
+            background-color: var(--gold);
+            color: var(--christmas-dark-red);
+            text-align: center;
+            padding: 8px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #e0a800;
+        }
+
+        /* Cabeçalho */
+        header {
+            background: linear-gradient(135deg, var(--christmas-red), var(--christmas-dark-red));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--gold);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        header h1 { font-family: 'Georgia', serif; font-size: 2.2rem; margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        header p { font-size: 1.1rem; opacity: 0.95; }
+
+        .verse-banner {
+            background-color: var(--christmas-green);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-style: italic;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Grid de Produtos */
+        .container { max-width: 1000px; margin: 0 auto; padding: 10px 20px; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        /* CARD DO PRODUTO */
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ffdde1;
+            position: relative;
+        }
+        
+        .badge {
+            position: absolute;
+            top: 15px; left: 0;
+            background-color: var(--gold);
+            color: var(--christmas-dark-red);
+            padding: 5px 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 10;
+            border-radius: 0 20px 20px 0;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* CARROSSEL */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            background-color: #eee;
+            overflow: hidden;
+        }
+        .carousel-slide { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .carousel-slide.active { display: block; animation: fadeEffect 0.5s; }
+        @keyframes fadeEffect { from {opacity: .4} to {opacity: 1} }
+
+        .prev, .next {
+            cursor: pointer; position: absolute; top: 50%; width: auto; margin-top: -22px; padding: 16px;
+            color: white; font-weight: bold; font-size: 18px; transition: 0.6s ease; user-select: none;
+            background-color: rgba(0,0,0,0.3); border: none;
+        }
+        .next { right: 0; border-radius: 3px 0 0 3px; }
+        .prev { left: 0; border-radius: 0 3px 3px 0; }
+        .prev:hover, .next:hover { background-color: rgba(0,0,0,0.8); }
+
+        .dots-container { text-align: center; position: absolute; bottom: 10px; width: 100%; }
+        .dot {
+            cursor: pointer; height: 10px; width: 10px; margin: 0 2px;
+            background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.6s ease;
+        }
+        .dot.active { background-color: var(--gold); }
+
+        /* Info e Botões */
+        .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-title { font-size: 1.4rem; color: var(--christmas-red); margin-bottom: 8px; font-weight: bold; font-family: 'Georgia', serif; }
+        .product-desc { font-size: 1rem; color: #555; margin-bottom: 15px; line-height: 1.4; flex-grow: 1; }
+        .product-price { font-size: 1.5rem; color: var(--christmas-green); font-weight: bold; margin-bottom: 15px; text-align: right; }
+        
+        .btn-add {
+            width: 100%; padding: 15px; background-color: var(--christmas-red); color: white;
+            border: none; border-radius: 8px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 3px 0 #8e0000;
+        }
+        .btn-add:active { transform: translateY(3px); box-shadow: none; }
+
+        /* Depoimentos */
+        .testimonials { background-color: #fff; padding: 40px 20px; margin-top: 40px; text-align: center; border-top: 1px solid #eee; }
+        .testimonials h2 { color: var(--christmas-dark-red); margin-bottom: 20px; }
+        .testimonial-card {
+            background: #f9f9f9; padding: 15px; border-radius: 10px; margin: 10px auto;
+            max-width: 600px; font-style: italic; border-left: 5px solid var(--gold);
+        }
+
+        /* Botão Flutuante */
+        .fab-cart {
+            position: fixed; bottom: 20px; right: 20px; background-color: var(--christmas-green);
+            color: white; padding: 15px 25px; border-radius: 50px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+            z-index: 1000; border: 2px solid var(--gold);
+        }
+        .fab-cart span { background: var(--christmas-red); border-radius: 50%; padding: 2px 8px; font-size: 0.9rem; }
+
+        /* Modais */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6); justify-content: center; align-items: flex-end;
+        }
+        .modal-content {
+            background-color: white; width: 100%; max-width: 600px; border-radius: 20px 20px 0 0;
+            padding: 25px; max-height: 90vh; overflow-y: auto; position: relative;
+            animation: slideUp 0.3s ease-out; border-top: 10px solid var(--christmas-green);
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .option-group { margin-bottom: 20px; }
+        .option-group label { display: block; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem; color: var(--christmas-dark-red); }
+        
+        /* ESTILO NOVO PARA BOTÕES DE OPÇÃO E MINIATURAS */
+        .option-btn {
+            display: inline-flex; /* Mudado para flex para alinhar imagem */
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px; margin: 5px;
+            border: 2px solid #ddd; border-radius: 10px;
+            background: white; font-size: 1rem; cursor: pointer;
+        }
+        .option-btn.selected {
+            border-color: var(--christmas-green); background-color: #e8f5e9;
+            color: var(--christmas-green); font-weight: bold;
+        }
+        .option-thumb {
+            width: 40px; height: 40px; object-fit: cover; border-radius: 5px;
+            vertical-align: middle; margin-left: 10px; border: 1px solid #ddd;
+        }
+
+        .btn-whatsapp {
+            width: 100%; padding: 20px; background-color: #25D366; color: white; border: none; border-radius: 10px;
+            font-size: 1.2rem; font-weight: bold; cursor: pointer; text-align: center; display: block; text-decoration: none;
+        }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 2.5rem; background: none; border: none; cursor: pointer; color: #999; }
+        
+        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 15px 0; }
+        .btn-remove { color: var(--christmas-red); background: none; border: none; font-size: 1.8rem; padding: 10px; cursor: pointer; }
+        .cart-total { font-size: 1.6rem; font-weight: bold; text-align: right; margin: 20px 0; color: var(--christmas-green); }
+
+        /* Neve */
+        .snowflake { color: #fff; position: fixed; top: -10%; z-index: 9999; user-select: none; pointer-events: none; animation-name: snowflakes-fall, snowflakes-shake; animation-duration: 10s, 3s; animation-iteration-count: infinite; }
+        @keyframes snowflakes-fall { 0% { top: -10%; } 100% { top: 100%; } }
+        @keyframes snowflakes-shake { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(80px); } }
+        .snowflake:nth-of-type(1) { left: 10%; animation-delay: 1s, 1s; } .snowflake:nth-of-type(2) { left: 20%; animation-delay: 6s, .5s; }
+        
+        @media (min-width: 601px) { .modal { align-items: center; } .modal-content { border-radius: 20px; } }
+    </style>
+</head>
+<body>
+
+    <div class="snow-container">
+        <div class="snowflake" style="left: 5%; animation-delay: 0s;">❅</div>
+        <div class="snowflake" style="left: 35%; animation-delay: 4s;">❆</div>
+        <div class="snowflake" style="left: 65%; animation-delay: 2s;">❅</div>
+        <div class="snowflake" style="left: 85%; animation-delay: 6s;">❆</div>
+    </div>
+
+    <div class="alert-bar">
+        ⚠️ Atenção: Encomendas para o Natal somente até dia 18/12!
+        Validade: 7 dias para Cheesecake e Chocotorta. 5 dias para as demais sobremesas.
+    </div>
+
+    <header>
+        <h1>🎄 Padas Doces 🎄</h1>
+        <p>Feito em família, para sua família.</p>
+    </header>
+
+    <div class="verse-banner">
+        "Hoje, na cidade de Davi, lhes nasceu o Salvador, que é Cristo, o Senhor." - Lucas 2:11
+    </div>
+
+    <div class="container">
+        <div id="product-list" class="product-grid">
+            </div>
+    </div>
+
+    <div class="testimonials">
+        <h2>O que nossos clientes dizem ❤️</h2>
+        <div class="testimonial-card">
+            "O Chocotone trufado é a melhor coisa que já comi! Minha família amou." <br><strong>- Maria S.</strong>
+        </div>
+        <div class="testimonial-card">
+            "Super caprichado e a entrega foi perfeita. Recomendo o bolo de pote!" <br><strong>- João P.</strong>
+        </div>
+    </div>
+
+    <div style="height: 80px;"></div>
+
+    <div class="fab-cart" onclick="openCart()">
+        🎁 Ver Pedido <span id="cart-count">0</span>
+    </div>
+
+    <div id="options-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('options-modal')">&times;</button>
+            <h2 id="modal-product-title" style="margin-bottom: 15px; color: var(--christmas-red);">Opções</h2>
+            <div id="modal-options-container"></div>
+            <div style="margin-top: 20px;">
+                <h3 id="modal-total-price" style="text-align: right; margin-bottom: 10px;">R$ 0,00</h3>
+                <button class="btn-add" onclick="confirmAddToCart()">Adicionar à Ceia</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('cart-modal')">&times;</button>
+            <h2 style="color: var(--christmas-red);">🎄 Sua Ceia</h2>
+            <div id="cart-items-container"></div>
+            <div class="cart-total">Total: <span id="cart-total-value">R$ 0,00</span></div>
+            <button class="btn-whatsapp" onclick="finalizeOrder()">🎅 Enviar Pedido no WhatsApp</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DADOS DOS PRODUTOS ---
+        const products = [
+            {
+                id: 1,
+                name: "Pudim 1kg",
+                description: "O clássico pudim de leite condensado, feito para impressionar: textura ultra lisinha, super cremoso e coberto com uma calda de caramelo dourada artesanal.",
+                basePrice: 55.00,
+                badge: "Mais Vendido ⭐",
+                images: [
+                    "images/pudim1.png",
+                ],
+                options: [
+                    { name: "Sabor", type: "radio", choices: [{ label: "Pudim tradicional de leite", price: 0 }, { label: "Pudim cremoso especial", price: 15.00 }] }
+                ]
+            },
+            {
+                id: 2,
+                name: "Panetone Salgado 500g",
+                description: "Uma surpresa na ceia! Massa artesanal super fofinha e úmida, recheada generosamente com calabresa e um toque especial de ervas finas.",
+                basePrice: 30.00,
+                badge: "Para Presente 🎁",
+                images: [
+                    "images/panetone1.jpeg",
+                    "images/panetone2.jpeg",
+                    "images/panetone3.jpeg",
+                   
+                ],
+                options: [
+                    { 
+                        name: "Sabor", 
+                        type: "radio", 
+                        choices: [
+                            { label: "Sem catupiry", price: 0 }, 
+                            { label: "Com catupiry", price: 5.00 }
+                        ] 
+                    },
+                    {
+                        name: "Embalagem",
+                        type: "checkbox",
+                        choices: [
+                            { 
+                                label: "Caixinha de Presente", 
+                                price: 8.00, 
+                                image: "images/panetone3.jpeg" // Foto da caixa no botão
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 3,
+                name: "Bolo de ninho com morango tamanho família 1kg",
+                description: "Massa de Pandeló de baunilha, creme de ninho, geleia de morango caseira, chantilly,suspiros e morangos frescos!",
+                basePrice: 85.00,
+                badge: "Novidade ✨",
+                images: [
+                    "images/morango1.png",
+                    "images/morango2.png",
+                ],
+                options: null
+            },
+            {
+                id: 4,
+                name: "Chocotorta de doce de leite 1kg",
+                description: "Creme levíssimo de doce de leite, biscoitos de chocolate, cobertura de chocolate ao leite com mel.",
+                basePrice: 70.00,
+                badge: null,
+                images: [
+                    "images/leite.png",
+                    "images/leite2.png",
+                    "images/leite3.png",
+                ],
+                options: null
+            },
+            {
+                id: 5,
+                name: "Torta cookie recheada com Nutella 1kg",
+                description: "Base de cookie amanteigado com gotas de chocolate nobre: crocante por fora e macia por dentro. O recheio é uma camada exagerada de pura Nutella cremosa.",
+                basePrice: 110.00,
+                badge: null,
+                images: [
+                    "images/coockie1.png",
+                    "images/coockie2.png"
+                ],
+                options: null
+            },
+            {
+                id: 6,
+                name: "Cheesecake de forno com geleia caseira de morangos 1kg",
+                description: "Sofisticação pura. Base crocante de biscoito e creme de queijo denso e aveludado assado lentamente. Finalizada com nossa geleia artesanal de morangos frescos.",
+                basePrice: 95.00,
+                badge: null,
+                images: [
+                    "images/Cheesecacke1.png",
+                    "images/Cheesecacke2.png",
+                    "images/Cheesecacke3.png",
+                ],
+                options: null
+            },
+        ];
+
+        let cart = [];
+        let currentProduct = null;
+        let currentSelection = {};
+        let slideIndices = {}; 
+
+        window.onload = () => { renderProducts(); };
+
+        function renderProducts() {
+            const list = document.getElementById('product-list');
+            list.innerHTML = '';
+            
+            products.forEach(product => {
+                slideIndices[product.id] = 0;
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                let displayPrice = product.basePrice;
+                if (displayPrice === 0 && product.options) displayPrice = product.options[0].choices[0].price;
+
+                const badgeHTML = product.badge ? `<div class="badge">${product.badge}</div>` : '';
+
+                let imagesHTML = '';
+                let dotsHTML = '';
+                let navHTML = '';
+
+                if (product.images.length > 0) {
+                    product.images.forEach((img, idx) => {
+                        imagesHTML += `<img src="${img}" class="carousel-slide ${idx === 0 ? 'active' : ''}" id="img-${product.id}-${idx}">`;
+                        if (product.images.length > 1) {
+                            dotsHTML += `<span class="dot ${idx === 0 ? 'active' : ''}" onclick="setSlide(${product.id}, ${idx})" id="dot-${product.id}-${idx}"></span>`;
+                        }
+                    });
+                    if (product.images.length > 1) {
+                        navHTML = `<button class="prev" onclick="changeSlide(${product.id}, -1)">&#10094;</button><button class="next" onclick="changeSlide(${product.id}, 1)">&#10095;</button><div class="dots-container">${dotsHTML}</div>`;
+                    }
+                }
+
+                card.innerHTML = `
+                    ${badgeHTML}
+                    <div class="carousel-container">${imagesHTML}${navHTML}</div>
+                    <div class="product-info">
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-desc">${product.description}</div>
+                        <div class="product-price">${displayPrice > 0 ? 'R$ ' + displayPrice.toFixed(2).replace('.',',') : 'A partir de...'}</div>
+                        <button class="btn-add" onclick="openProductModal(${product.id})"><span>🎅</span> Adicionar</button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        // --- Lógica do Carrossel ---
+        function changeSlide(productId, n) {
+            const product = products.find(p => p.id === productId);
+            let newIndex = slideIndices[productId] + n;
+            if (newIndex >= product.images.length) newIndex = 0;
+            if (newIndex < 0) newIndex = product.images.length - 1;
+            setSlide(productId, newIndex);
+        }
+
+        function setSlide(productId, index) {
+            slideIndices[productId] = index;
+            const product = products.find(p => p.id === productId);
+            for(let i=0; i < product.images.length; i++) {
+                document.getElementById(`img-${productId}-${i}`).classList.remove('active');
+                const dot = document.getElementById(`dot-${productId}-${i}`);
+                if(dot) dot.classList.remove('active');
+            }
+            document.getElementById(`img-${productId}-${index}`).classList.add('active');
+            const newDot = document.getElementById(`dot-${productId}-${index}`);
+            if(newDot) newDot.classList.add('active');
+        }
+
+        // --- NOVA LÓGICA DE COMPRA (COM CHECKBOX) ---
+        function openProductModal(productId) {
+            currentProduct = products.find(p => p.id === productId);
+            currentSelection = {}; 
+
+            if (!currentProduct.options) {
+                addToCart(currentProduct, [], currentProduct.basePrice);
+                return;
+            }
+
+            document.getElementById('modal-product-title').innerText = currentProduct.name;
+            const container = document.getElementById('modal-options-container');
+            container.innerHTML = '';
+
+            currentProduct.options.forEach((opt, index) => {
+                const group = document.createElement('div');
+                group.className = 'option-group';
+                group.innerHTML = `<label>Escolha ${opt.name}:</label>`;
+                
+                const isCheckbox = opt.type === 'checkbox';
+
+                opt.choices.forEach(choice => {
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    
+                    let content = choice.label;
+                    if (choice.price > 0) content += ` (+ R$ ${choice.price.toFixed(2).replace('.',',')})`;
+                    if (choice.image) content += `<img src="${choice.image}" class="option-thumb">`; // Imagem no botão
+                    
+                    btn.innerHTML = content;
+                    btn.onclick = () => selectOption(index, choice, btn, isCheckbox);
+                    group.appendChild(btn);
+                });
+                container.appendChild(group);
+            });
+            document.getElementById('options-modal').style.display = 'flex';
+            updateModalTotal();
+        }
+
+        function selectOption(groupIndex, choice, btnElement, isCheckbox) {
+            if (isCheckbox) {
+                // Lógica de Checkbox (Liga/Desliga)
+                if (btnElement.classList.contains('selected')) {
+                    btnElement.classList.remove('selected');
+                    delete currentSelection[groupIndex + '_' + choice.label];
+                } else {
+                    btnElement.classList.add('selected');
+                    currentSelection[groupIndex + '_' + choice.label] = choice;
+                }
+            } else {
+                // Lógica de Radio (Apenas um)
+                const siblings = btnElement.parentElement.querySelectorAll('.option-btn');
+                siblings.forEach(s => s.classList.remove('selected'));
+                btnElement.classList.add('selected');
+                
+                // Remove seleção anterior deste grupo específico
+                Object.keys(currentSelection).forEach(key => {
+                    if(key.startsWith(groupIndex + '_Radio')) delete currentSelection[key];
+                });
+                currentSelection[groupIndex + '_Radio'] = choice;
+            }
+            updateModalTotal();
+        }
+
+        function updateModalTotal() {
+            let total = currentProduct.basePrice;
+            Object.values(currentSelection).forEach(choice => total += choice.price);
+            document.getElementById('modal-total-price').innerText = "R$ " + total.toFixed(2).replace('.',',');
+        }
+
+        function confirmAddToCart() {
+            // Validação: Verifica se os campos "Radio" (obrigatórios) foram preenchidos
+            let missing = false;
+            if (currentProduct.options) {
+                currentProduct.options.forEach((opt, index) => {
+                    if (opt.type !== 'checkbox') {
+                        // Verifica se existe alguma seleção para este grupo
+                        const hasSelection = Object.keys(currentSelection).some(k => k.startsWith(index + '_Radio'));
+                        if (!hasSelection) missing = true;
+                    }
+                });
+            }
+
+            if (missing) { alert("Selecione as opções obrigatórias (ex: Sabor)."); return; }
+            
+            const selectionArray = Object.values(currentSelection);
+            const finalPrice = parseFloat(document.getElementById('modal-total-price').innerText.replace('R$ ','').replace(',','.'));
+            addToCart(currentProduct, selectionArray, finalPrice);
+            closeModal('options-modal');
+        }
+
+        function addToCart(product, options, price) {
+            cart.push({ id: Date.now(), productName: product.name, options: options, price: price });
+            document.querySelector('.fab-cart').style.transform = "scale(1.1)";
+            setTimeout(() => document.querySelector('.fab-cart').style.transform = "scale(1)", 200);
+            updateCartUI();
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = cart.length === 0 ? '<p style="text-align: center; color: #777;">Vazio...</p>' : '';
+            let total = 0;
+            cart.forEach(item => {
+                total += item.price;
+                const opts = item.options.map(o => o.label).join(', ');
+                container.innerHTML += `<div class="cart-item"><div><h4>${item.productName}</h4><p style="font-size:0.9rem;color:#666">${opts}</p><strong>R$ ${item.price.toFixed(2).replace('.',',')}</strong></div><button class="btn-remove" onclick="removeFromCart(${item.id})">&times;</button></div>`;
+            });
+            document.getElementById('cart-total-value').innerText = "R$ " + total.toFixed(2).replace('.',',');
+        }
+
+        function openCart() { document.getElementById('cart-modal').style.display = 'flex'; }
+        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+        
+        function finalizeOrder() {
+            if (cart.length === 0) { alert("Carrinho vazio!"); return; }
+            let msg = "Olá! Gostaria de encomendar para o *Natal*:\n\n";
+            cart.forEach(i => msg += `🎁 ${i.productName} ${i.options.length > 0 ? '(' + i.options.map(o=>o.label).join(', ') + ')' : ''}\n`);
+            msg += `\n*Total: ${document.getElementById('cart-total-value').innerText}*`;
+            window.open(`https://wa.me/5511998577686?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+        window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = "none"; }
+    </script>
+</body>
+</html>
