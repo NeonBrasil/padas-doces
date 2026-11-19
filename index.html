@@ -180,8 +180,8 @@ body.open .drawer{transform:none;visibility:visible}
 .q{font-family:"Cormorant Garamond",serif;font-size:31px;font-weight:500;color:var(--pine);line-height:1.15;margin:18px 0 6px}
 .q-sub{color:var(--muted);font-size:16px;margin-bottom:14px}
 .date span{display:block;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.date input{width:100%;font:inherit;font-size:20px;font-weight:400;padding:14px 16px;border:2px solid var(--gold);border-radius:12px;background:#fff;color:var(--ink)}
-.date input:focus{outline:3px solid var(--gold2);outline-offset:1px}
+.date select{width:100%;font:inherit;font-size:19px;font-weight:400;padding:14px 46px 14px 16px;border:2px solid var(--gold);border-radius:12px;color:var(--ink);-webkit-appearance:none;appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%2312302a' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 18px center}
+.date select:focus{outline:3px solid var(--gold2);outline-offset:1px}
 .notice{margin:18px 0;background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);padding:14px 16px;font-size:15.5px}
 .notice b{font-weight:500;color:var(--berry)}
 .summary{border-top:1px solid var(--line);padding-top:12px}
@@ -294,6 +294,7 @@ body.encerrado footer{padding-bottom:40px}
 
 .toast{position:fixed;left:50%;bottom:126px;transform:translate(-50%,20px);background:var(--pine);color:var(--gold2);padding:14px 24px;font-size:16px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:60;border:1px solid var(--gold);border-radius:40px;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+body.open .toast{opacity:0}
 
 @media(min-width:720px){
   .grid.large{grid-template-columns:1fr 1fr}
@@ -417,7 +418,7 @@ body.encerrado footer{padding-bottom:40px}
     <div class="d-body">
       <p class="q">Para quando é a sua encomenda?</p>
       <p class="q-sub">Escolha o dia da entrega ou retirada (até 24/12).</p>
-      <label class="date"><span>Data da encomenda</span><input type="date" id="date"></label>
+      <label class="date"><span>Dia da entrega ou retirada</span><select id="date"><option value="">Escolha o dia</option></select></label>
       <p class="err" id="dateErr" role="alert" hidden></p>
       <p class="notice">Recebemos encomendas até <b>15/12/2026</b>, com entrega ou retirada até <b>24/12</b>. Para pedidos antes do Natal, pedimos <b>3 dias</b> de antecedência para o preparo.</p>
       <div class="summary"><h5>Seu pedido</h5><ul id="summary"></ul></div>
@@ -805,6 +806,19 @@ const fmtShort = s => fromIso(s).toLocaleDateString("pt-BR",{day:"2-digit",month
 const fmtLong  = s => fromIso(s).toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"});
 function minDate(){ const d = new Date(); d.setDate(d.getDate()+DIAS_PREPARO); return iso(d); }
 
+/* lista só com os dias permitidos: de hoje + DIAS_PREPARO até ULTIMA_ENTREGA
+   (uma lista funciona igual em todo celular; o calendário do iPhone não respeita limites) */
+function fillDates(){
+  const sel = $("#date"), keep = sel.value;
+  const opts = ['<option value="">Escolha o dia</option>'];
+  for(let d = fromIso(minDate()); iso(d) <= ULTIMA_ENTREGA; d.setDate(d.getDate()+1)){
+    const txt = d.toLocaleDateString("pt-BR",{weekday:"long", day:"2-digit", month:"2-digit"});
+    opts.push(`<option value="${iso(d)}">${txt.charAt(0).toUpperCase() + txt.slice(1)}</option>`);
+  }
+  sel.innerHTML = opts.join("");
+  if(keep && sel.querySelector(`option[value="${keep}"]`)) sel.value = keep;
+}
+
 function goCheckout(){
   if(FECHADO) return;
   if(!cart.size){ toast("Escolha ao menos um doce."); return; }
@@ -815,8 +829,7 @@ function goCheckout(){
   });
   list.push(`<li class="sum-total"><span>Total</span><span>${brl(totals().total)}</span></li>`);
   $("#summary").innerHTML = list.join("");
-  $("#date").min = minDate();
-  $("#date").max = ULTIMA_ENTREGA;
+  fillDates();
   $("#dateErr").hidden = true;
   show("checkout");
 }
@@ -944,7 +957,7 @@ $("#closeCart").onclick = $("#shade").onclick = closeDrawer;
 $("#toCheckout").onclick = goCheckout;
 $("#send").onclick = send;
 $("#thxClose").onclick = closeThanks;
-$("#date").addEventListener("input", ()=> $("#dateErr").hidden = true);
+$("#date").addEventListener("change", ()=> $("#dateErr").hidden = true);
 document.addEventListener("keydown", e=>{
   if(e.key!=="Escape") return;
   if(modal.classList.contains("show")) closeModal();
