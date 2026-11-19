@@ -1,0 +1,4 @@
+# Fotos originais (pesadas) ficam só no computador.
+# O site usa apenas as versões leves em images/site/.
+images/*
+!images/site/

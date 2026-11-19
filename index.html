@@ -6,6 +6,21 @@
 <meta name="theme-color" content="#12302a">
 <title>Doces Caseiros · Cardápio de Natal</title>
 <meta name="description" content="Doces Caseiros: sobremesas artesanais feitas em família, para sua família. Encomendas de Natal.">
+<link rel="icon" href="images/site/icone.svg" type="image/svg+xml">
+<link rel="icon" href="images/site/icone-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="images/site/icone-180.png">
+<!-- Prévia do link no WhatsApp/Instagram. Se mudar o nome do repositório, troque "padas-doces" nas 2 linhas com o endereço. -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Doces Caseiros">
+<meta property="og:title" content="Doces Caseiros · Cardápio de Natal">
+<meta property="og:description" content="Sobremesas artesanais feitas em família, para sua família. Escolha seus doces e faça sua encomenda pelo WhatsApp.">
+<meta property="og:url" content="https://neonbrasil.github.io/padas-doces/">
+<meta property="og:image" content="https://neonbrasil.github.io/padas-doces/images/site/compartilhar.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Doces Caseiros: Torta holandesa e Pavê Tentação">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
@@ -221,6 +236,13 @@ body.open .drawer{transform:none;visibility:visible}
 .choices.big .choice b{font-size:18px}
 
 
+/* encomendas encerradas (depois do prazo): cardápio continua visível, sem carrinho */
+.closed-note{display:none;max-width:640px;margin:26px auto 0;background:var(--berry);color:#f5e6c8;padding:16px 22px;font-size:17px;line-height:1.55}
+.closed-note a{color:var(--gold2);font-weight:500}
+body.encerrado .closed-note{display:block}
+body.encerrado .add,body.encerrado .fab,body.encerrado .cart-btn,body.encerrado #mAdd,body.encerrado .m-buy .qty{display:none}
+body.encerrado footer{padding-bottom:40px}
+
 /* agradecimento animado (antes de abrir o WhatsApp) */
 .thx{position:fixed;inset:0;z-index:70;display:grid;place-items:center;text-align:center;padding:24px;background:radial-gradient(ellipse at 50% 32%,var(--pine2),var(--pine) 58%,#0a1e1a);color:var(--cream);overflow:hidden}
 .thx[hidden]{display:none}
@@ -310,7 +332,7 @@ body.open .drawer{transform:none;visibility:visible}
 
 <div class="snow" id="snow" aria-hidden="true"></div>
 
-<div class="ribbon">✦ Edição especial de Natal ✦ Encomendas até 15/12 ✦</div>
+<div class="ribbon" id="ribbon">✦ Edição especial de Natal ✦ Encomendas até 15/12 ✦</div>
 
 <header class="hero">
   <span class="star">✦</span>
@@ -332,6 +354,7 @@ body.open .drawer{transform:none;visibility:visible}
     <h2>Nosso cardápio</h2>
     <p>Receitas de família, ingredientes de qualidade e muito carinho em cada detalhe.</p>
     <div class="orn">❄ ✦ ❄</div>
+    <p class="closed-note">As encomendas de Natal foram encerradas em 15/12. Obrigada pelo carinho! ✦<br><a data-wa href="#" target="_blank" rel="noopener">Fale com a gente no WhatsApp</a></p>
   </section>
 
   <section class="cat" id="grandes">
@@ -347,7 +370,7 @@ body.open .drawer{transform:none;visibility:visible}
 
 <section class="info" id="info">
   <div class="wrap">
-    <div><div class="ic">♡</div><h5>Encomendas</h5><p>Recebemos encomendas até <b>15/12/2026</b>. Para pedidos antes do Natal, pedimos <b>3 dias</b> de antecedência para o preparo.</p></div>
+    <div><div class="ic">♡</div><h5>Encomendas</h5><p>Recebemos encomendas até <b>15/12/2026</b>, com entrega ou retirada até <b>24/12</b>. Para pedidos antes do Natal, pedimos <b>3 dias</b> de antecedência para o preparo.</p></div>
     <div><div class="ic">❄</div><h5>Conservação</h5><p>Sobremesas refrigeradas devem ficar na geladeira. A validade de cada doce está indicada no cardápio.</p></div>
     <div><div class="ic">✦</div><h5>Dúvidas?</h5><p>Fale com a gente no WhatsApp:<br><a id="waLink" href="#" target="_blank" rel="noopener">(11) 99857-7686</a></p></div>
   </div>
@@ -393,10 +416,10 @@ body.open .drawer{transform:none;visibility:visible}
   <section class="view" data-view="checkout" hidden>
     <div class="d-body">
       <p class="q">Para quando é a sua encomenda?</p>
-      <p class="q-sub">Escolha o dia em que você precisa dos doces.</p>
+      <p class="q-sub">Escolha o dia da entrega ou retirada (até 24/12).</p>
       <label class="date"><span>Data da encomenda</span><input type="date" id="date"></label>
       <p class="err" id="dateErr" role="alert" hidden></p>
-      <p class="notice">Recebemos encomendas até <b>15/12/2026</b>. Para pedidos antes do Natal, pedimos <b>3 dias</b> de antecedência para o preparo.</p>
+      <p class="notice">Recebemos encomendas até <b>15/12/2026</b>, com entrega ou retirada até <b>24/12</b>. Para pedidos antes do Natal, pedimos <b>3 dias</b> de antecedência para o preparo.</p>
       <div class="summary"><h5>Seu pedido</h5><ul id="summary"></ul></div>
     </div>
     <div class="d-foot">
@@ -462,6 +485,11 @@ const WHATSAPP = "5511998577686";
 const DIAS_PREPARO = 3;
 // Tempo (em milissegundos) da mensagem de agradecimento antes de abrir o WhatsApp
 const ESPERA_WHATSAPP = 2200;
+// Último dia para FAZER pedidos (ano-mês-dia). Depois dele o carrinho some e aparece o aviso de encerrado.
+// Para ver como fica encerrado antes da data, abra o site com ?encerrado no fim do endereço.
+const PRAZO_PEDIDOS = "2026-12-15";
+// Último dia de ENTREGA ou RETIRADA (a data escolhida na finalização vai no máximo até aqui)
+const ULTIMA_ENTREGA = "2026-12-24";
 
 /* ===== PRODUTOS =====
    group:    "large" = Sobremesas na travessa · "small" = Sobremesas individuais
@@ -623,7 +651,24 @@ function change(key, d){
   n<=0 ? cart.delete(key) : cart.set(key,n);
   renderCart();
 }
+/* carrinho guardado no aparelho: se a pessoa fechar a página sem querer, os doces continuam lá */
+const CART_KEY = "doces-caseiros-carrinho";
+function saveCart(){ try{ localStorage.setItem(CART_KEY, JSON.stringify([...cart])); }catch(e){} }
+function loadCart(){
+  try{
+    JSON.parse(localStorage.getItem(CART_KEY) || "[]").forEach(([k,q])=>{
+      const [base, escolha] = String(k).split("::");
+      const it = catalog.get(base); if(!it) return;
+      const p = byId(it.pid);
+      if(p.ativo===false || (p.options && base===p.id)) return;
+      if(escolha ? !(p.pergunta && p.pergunta.opcoes.some(o => o.label===escolha)) : p.pergunta) return;
+      const n = Math.min(99, Math.floor(Number(q)));
+      if(n>0) cart.set(String(k), n);
+    });
+  }catch(e){ cart.clear(); }
+}
 function addToCart(key, n=1){
+  if(FECHADO) return;
   change(key, n); bump();
   toast(n>1 ? `${n} adicionados ao carrinho ✦` : "Adicionado ao carrinho ✦");
 }
@@ -648,6 +693,7 @@ function renderCart(){
     b.textContent = q ? `✓ No carrinho (${q})` : "+ Adicionar";
     b.classList.toggle("on", q>0);
   });
+  saveCart();
 }
 function bump(){
   const ic = $("#fabIc");
@@ -760,6 +806,7 @@ const fmtLong  = s => fromIso(s).toLocaleDateString("pt-BR",{weekday:"long",day:
 function minDate(){ const d = new Date(); d.setDate(d.getDate()+DIAS_PREPARO); return iso(d); }
 
 function goCheckout(){
+  if(FECHADO) return;
   if(!cart.size){ toast("Escolha ao menos um doce."); return; }
   const list = [];
   cart.forEach((q,k)=>{
@@ -769,6 +816,7 @@ function goCheckout(){
   list.push(`<li class="sum-total"><span>Total</span><span>${brl(totals().total)}</span></li>`);
   $("#summary").innerHTML = list.join("");
   $("#date").min = minDate();
+  $("#date").max = ULTIMA_ENTREGA;
   $("#dateErr").hidden = true;
   show("checkout");
 }
@@ -790,10 +838,15 @@ function buildMessage(dateIso){
 }
 
 function send(){
+  if(FECHADO) return;
   const v = $("#date").value, err = $("#dateErr");
   if(!v){ err.textContent = "Escolha a data da sua encomenda."; err.hidden = false; $("#date").focus(); return; }
   if(v < minDate()){
     err.textContent = `Pedimos ${DIAS_PREPARO} dias de antecedência. Escolha uma data a partir de ${fmtShort(minDate())}.`;
+    err.hidden = false; $("#date").focus(); return;
+  }
+  if(v > ULTIMA_ENTREGA){
+    err.textContent = `Entregas e retiradas vão até ${fmtShort(ULTIMA_ENTREGA)}. Escolha uma data até esse dia.`;
     err.hidden = false; $("#date").focus(); return;
   }
   const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(buildMessage(v))}`;
@@ -940,8 +993,15 @@ function toast(m){
   }
 })();
 
-$("#waLink").href = `https://wa.me/${WHATSAPP}`;
+$$("#waLink, [data-wa]").forEach(a => a.href = `https://wa.me/${WHATSAPP}`);
 $("#year").textContent = new Date().getFullYear();
+
+/* prazo de pedidos: depois do último dia, só mostra o cardápio */
+const FECHADO = iso(new Date()) > PRAZO_PEDIDOS || new URLSearchParams(location.search).has("encerrado");
+if(FECHADO){
+  document.body.classList.add("encerrado");
+  $("#ribbon").textContent = "✦ Encomendas de Natal encerradas · Obrigada! ✦";
+} else loadCart();
 render(); renderCart();
 </script>
 </body>
