@@ -480,7 +480,7 @@ const products = [
       { label:"Chocolate ao leite",    hint:"mais suave e docinho", sw:"#9a6544" },
       { label:"Chocolate meio amargo", hint:"sabor mais intenso",   sw:"#4a2a1c" } ]} },
 
-  { id:"pave-tentacao", group:"large", name:"Pavê Tentação de doce de leite",
+  { id:"pave-tentacao", group:"large", name:"Pavê Tentação de doce de leite", unit:"900 g",
     imgs:["images/site/pave-tentacao.jpg","images/site/pave-tentacao-sem.jpg"],
     desc:"Camadas de biscoito de chocolate umedecido no café, creme leve de doce de leite e cobertura de ganache de chocolate ao leite. Pode ser finalizado com raspas e granulado de chocolate e cerejas.",
     price:90, facts:["Serve até 8 pessoas","Validade 7 dias","Manter refrigerado"],
@@ -498,10 +498,11 @@ const products = [
     desc:"O clássico pudim de leite condensado, cremoso e sem furinhos.",
     price:65, facts:["Validade 5 dias","Manter refrigerado"] },
 
-  { id:"manjar-coco", group:"large", name:"Manjar de coco tradicional", imgs:[],
+  { id:"manjar-coco", group:"large", name:"Manjar de coco tradicional", unit:"1,15 kg",
+    imgs:["images/site/manjar-coco.jpg"],
     lead:"Deixe espaço para a última sobremesa!",
     desc:"Um clássico que atravessa gerações. Sabor marcante de coco, feito como antigamente, com calda caseira de ameixas secas. Impossível comer uma colherada só!",
-    price:62, facts:["Validade 5 dias","Manter refrigerado"] },
+    price:62, facts:["Serve de 8 a 10 pessoas","Validade 5 dias","Manter refrigerado"] },
 
   // Fora do cardápio por enquanto (sem foto e sem preço)
   { id:"bombom-morango", group:"large", ativo:false, name:"Bombom de morango na travessa", imgs:[],
@@ -521,7 +522,7 @@ const products = [
     desc:"O nosso pudim tradicional em porção individual, para cada um ter o seu.",
     price:8, facts:["Validade 5 dias","Manter refrigerado"] },
 
-  { id:"pao-de-mel", group:"small", name:"Pão de mel",
+  { id:"pao-de-mel", group:"small", name:"Pão de mel", unit:"80 g",
     imgs:["images/site/pao-de-mel.jpg"],
     desc:"Massa de cacau 70% com recheio e cobertura de chocolate. Escolha o sabor:",
     facts:["Validade 10 dias"],
